@@ -3,7 +3,7 @@ package config
 import (
 	"database/sql"
 
-	"github.com/hyper-dot/books-server/internal/queries"
+	queries "github.com/hyper-dot/books-server/internal/generated"
 )
 
 func Query() (*queries.Queries, *sql.DB) {

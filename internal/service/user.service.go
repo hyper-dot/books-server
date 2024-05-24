@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/hyper-dot/books-server/internal/config"
-	"github.com/hyper-dot/books-server/internal/queries"
+	"github.com/hyper-dot/books-server/internal/generated"
 	"github.com/hyper-dot/books-server/internal/schema"
 	"github.com/hyper-dot/books-server/internal/utils"
 )
