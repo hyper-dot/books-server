@@ -2,6 +2,7 @@ package service
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/hyper-dot/books-server/internal/config"
 	"github.com/hyper-dot/books-server/internal/generated"
@@ -23,7 +24,20 @@ func AddNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var parsedUser = queries.AddUserParams{Username: user.Username, Email: user.Email, Password: user.Password, Salt: "salt", RefreshToken: "refesh token"}
+	/* CHECK IF USER EXISTS WITH THE EMAIL */
+	_, err = query.GetUserByEmail(r.Context(), user.Email)
+	if err == nil {
+		utils.RespondWithError("User with the email already exists !!", w, http.StatusBadRequest, r.Context())
+		return
+	}
+
+	/* GET USERNAME FROM EMAIL */
+	username := strings.Split(user.Email, "@")[0]
+
+	/* GENERATE HASH AND PASSWORD */
+	hash, salt, err := utils.HashPassword(user.Password)
+
+	var parsedUser = queries.AddUserParams{Username: username, Email: user.Email, Password: hash, Salt: salt}
 	err = query.AddUser(r.Context(), parsedUser)
 
 	if err != nil {
