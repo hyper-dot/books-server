@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.26.0
 
-package books
+package queries
 
 import (
 	"database/sql"

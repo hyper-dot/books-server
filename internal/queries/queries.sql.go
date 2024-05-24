@@ -3,11 +3,38 @@
 //   sqlc v1.26.0
 // source: queries.sql
 
-package books
+package queries
 
 import (
 	"context"
 )
+
+const addUser = `-- name: AddUser :exec
+INSERT INTO users (
+    username, email, password, salt, refresh_token
+) VALUES (
+    $1, $2, $3, $4, $5
+)
+`
+
+type AddUserParams struct {
+	Username     string
+	Email        string
+	Password     string
+	Salt         string
+	RefreshToken string
+}
+
+func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) error {
+	_, err := q.db.ExecContext(ctx, addUser,
+		arg.Username,
+		arg.Email,
+		arg.Password,
+		arg.Salt,
+		arg.RefreshToken,
+	)
+	return err
+}
 
 const getAllUsers = `-- name: GetAllUsers :one
 SELECT id, username, email, password, salt, refresh_token, created_at, updated_at FROM users
